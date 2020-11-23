@@ -5,6 +5,8 @@ ENV PATH /opt/conda/bin:$PATH
 
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates curl git && \
+    apt-get install -y procps && \ 
+    apt-get install -y nano && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -19,6 +21,10 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86
 ENV TINI_VERSION v0.16.1
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
+
+RUN conda install -y pandas
+RUN conda install -c bioconda diamond -y
+RUN conda install -c conda-forge biopython -y 
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/bin/bash" ]
